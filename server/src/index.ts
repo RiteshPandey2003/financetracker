@@ -2,6 +2,11 @@ import express, { Express } from "express";
 import mongoose from "mongoose";
 import financialRecordRouter from "./routes/financial-records";
 import cors from "cors";
+import dotenv from "dotenv"
+dotenv.config({
+  path: "./.env",
+});
+
 
 const app: Express = express();
 const port = process.env.PORT || 3001;
@@ -9,8 +14,8 @@ const port = process.env.PORT || 3001;
 app.use(express.json());
 app.use(cors());
 
-const mongoURI: string =
-  "mongodb+srv://financetraker:financetraker@cluster0.k2yq6gf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const mongoURI: string =  process.env.MONGODB_URI || "";
+  
 
 mongoose
   .connect(mongoURI)

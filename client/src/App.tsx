@@ -11,11 +11,14 @@ function App() {
     <Router>
       <div className="app-container">
         <div className="navbar">
-          <Link to="/"> Dashboard</Link>
-          <Link to="/auth"> login </Link>
-          <SignedIn>
+        <SignedIn>
             <UserButton />
           </SignedIn>
+          <Link to="/"> Dashboard</Link>
+         
+         <Link to="/auth" className="login"> Login </Link>
+          
+         
         </div>
         <Routes>
           <Route

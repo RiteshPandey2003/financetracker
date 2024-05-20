@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { useFinancialRecords } from "../../contexts/financial-record-context";
+import { Link } from "react-router-dom";
 
 export const FinancialRecordForm = () => {
   const [description, setDescription] = useState<string>("");
@@ -29,6 +30,12 @@ export const FinancialRecordForm = () => {
     setCategory("");
     setPaymentMethod("");
   };
+
+  if (!user) {
+    return <div className="form-container"><div className="warning-container">
+      <p className="warning">Please log in to add a financial record.</p>
+      <Link to='/auth' className="login">Login</Link></div></div>;
+  }
 
   return (
     <div className="form-container">

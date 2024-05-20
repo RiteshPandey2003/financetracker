@@ -8,12 +8,15 @@ export const FinancialRecordForm = () => {
   const [amount, setAmount] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false); // New state for loading
   const { addRecord } = useFinancialRecords();
 
   const { user } = useUser();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    setIsLoading(true); // Set loading to true when submitting
 
     const newRecord = {
       userId: user?.id ?? "",
@@ -24,17 +27,32 @@ export const FinancialRecordForm = () => {
       paymentMethod: paymentMethod,
     };
 
-    addRecord(newRecord);
-    setDescription("");
-    setAmount("");
-    setCategory("");
-    setPaymentMethod("");
+    try {
+      await addRecord(newRecord); // Assuming addRecord is an async function
+      // Clear input fields on successful submission
+      setDescription("");
+      setAmount("");
+      setCategory("");
+      setPaymentMethod("");
+    } catch (error) {
+      // Handle error if necessary
+      console.error("Error adding record:", error);
+    } finally {
+      setIsLoading(false); // Set loading back to false after submission
+    }
   };
 
   if (!user) {
-    return <div className="form-container"><div className="warning-container">
-      <p className="warning">Please log in to add a financial record.</p>
-      <Link to='/auth' className="login">Login</Link></div></div>;
+    return (
+      <div className="form-container">
+        <div className="warning-container">
+          <p className="warning">Please log in to add a financial record.</p>
+          <Link to="/auth" className="login">
+            Login
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -91,8 +109,9 @@ export const FinancialRecordForm = () => {
             <option value="Bank Transfer">Bank Transfer</option>
           </select>
         </div>
-        <button type="submit" className="button">
-          Add Record
+        {/* Render button with loader conditionally */}
+        <button type="submit" className="button" disabled={isLoading}>
+          {isLoading ? "Adding..." : "Add Record"}
         </button>
       </form>
     </div>

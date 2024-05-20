@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import financialRecordRouter from "./routes/financial-records";
 import cors from "cors";
 import dotenv from "dotenv"
+import path from "path"
 dotenv.config({
   path: "./.env",
 });
